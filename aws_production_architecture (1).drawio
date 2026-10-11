@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="Electron" modified="2026-10-11T16:00:00.000Z" agent="Mozilla/5.0" version="21.6.8" type="device">
+  <diagram id="aws-vibrant-arch" name="AWS Production Architecture">
+    <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1250" background="#F1F5F9" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ========================================== -->
+        <!-- TOP BANNER (BIG, VIBRANT, PROFESSIONAL)    -->
+        <!-- ========================================== -->
+        <mxCell id="top_banner" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;strokeWidth=2;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1660" height="95" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="title_text" value="&lt;font color=&quot;#38BDF8&quot; style=&quot;font-size: 24px; font-weight: 800;&quot;&gt;AWS Production Architecture Blueprint&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#F8FAFC&quot; style=&quot;font-size: 14px; font-weight: 500;&quot;&gt;Enterprise Multi-AZ EC2 Auto Scaling, Private VPC Subnets, S3 Storage Tiers &amp;amp; Event-Driven Lambda Pipeline&lt;/font&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="65" y="32" width="1050" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Metadata Badges inside Top Banner -->
+        <mxCell id="badge_vpc" value="&lt;b&gt;VPC CIDR&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#38BDF8&quot;&gt;10.0.0.0/16&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0F172A;strokeColor=#38BDF8;fontColor=#FFFFFF;fontSize=11;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="35" width="115" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="badge_region" value="&lt;b&gt;PRIMARY AZs&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#34D399&quot;&gt;us-east-1a / 1b&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0F172A;strokeColor=#34D399;fontColor=#FFFFFF;fontSize=11;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="35" width="125" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="badge_dr" value="&lt;b&gt;DR VAULT&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#C084FC&quot;&gt;us-west-2 Target&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0F172A;strokeColor=#C084FC;fontColor=#FFFFFF;fontSize=11;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="35" width="125" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="badge_security" value="&lt;b&gt;SECURITY&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#FBBF24&quot;&gt;IMDSv2 + KMS + TLS&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0F172A;strokeColor=#FBBF24;fontColor=#FFFFFF;fontSize=11;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="35" width="135" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================== -->
+        <!-- INGRESS / EDGE SERVICES (TOP LEFT)         -->
+        <!-- ========================================== -->
+        <mxCell id="edge_container" value="&lt;b style=&quot;font-size:13px; color:#1E1B4B;&quot;&gt;INGRESS &amp;amp; EDGE SECURITY TIER&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#4F46E5;strokeWidth=2;rounded=1;startSize=28;fontSize=12;fontColor=#312E81;" vertex="1" parent="1">
+          <mxGeometry x="40" y="130" width="460" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="client_node" value="&lt;b style=&quot;font-size:12px;&quot;&gt;Internet Clients&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot;&gt;HTTPS / TLS 1.3&lt;br&gt;Public Traffic&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6366F1;strokeWidth=2;fontColor=#0F172A;" vertex="1" parent="edge_container">
+          <mxGeometry x="15" y="38" width="120" height="58" as="geometry" />
+        </mxCell>
+
+        <mxCell id="r53_node" value="&lt;b style=&quot;color:#1E3A8A;&quot;&gt;Amazon Route 53&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#3B82F6&quot;&gt;Public Hosted Zone&lt;br&gt;Health Check Failover&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#2563EB;strokeWidth=1.5;fontSize=10;" vertex="1" parent="edge_container">
+          <mxGeometry x="160" y="38" width="135" height="58" as="geometry" />
+        </mxCell>
+
+        <mxCell id="waf_node" value="&lt;b style=&quot;color:#92400E;&quot;&gt;AWS WAF v2&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#D97706&quot;&gt;Rate Limiting Rules&lt;br&gt;OWASP Top 10 Guard&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=1.5;fontSize=10;" vertex="1" parent="edge_container">
+          <mxGeometry x="310" y="38" width="135" height="58" as="geometry" />
+        </mxCell>
+
+        <!-- Top Ingress Connectors -->
+        <mxCell id="arr_edge1" value="DNS" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#4F46E5;fontColor=#4F46E5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="edge_container" source="client_node" target="r53_node">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_edge2" value="Filter" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#D97706;fontColor=#B45309;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="edge_container" source="r53_node" target="waf_node">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================== -->
+        <!-- MAIN VPC CONTAINER (LEFT & CENTER COLUMN)  -->
+        <!-- ========================================== -->
+        <mxCell id="vpc_container" value="&lt;b style=&quot;font-size:15px; color:#FFFFFF;&quot;&gt;Amazon Virtual Private Cloud (VPC) — 10.0.0.0/16 Multi-AZ Enterprise Fabric&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#0F172A;strokeColor=#2563EB;strokeWidth=3;rounded=1;startSize=36;fontSize=14;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="40" y="260" width="1120" height="950" as="geometry" />
+        </mxCell>
+
+        <!-- Top VPC Router Bar -->
+        <mxCell id="igw_node" value="&lt;b style=&quot;color:#1E40AF;&quot;&gt;Internet Gateway (IGW)&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#3B82F6&quot;&gt;Public Subnet Route: 0.0.0.0/0&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=2;fontSize=11;" vertex="1" parent="vpc_container">
+          <mxGeometry x="30" y="50" width="230" height="46" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vpce_s3_node" value="&lt;b style=&quot;color:#065F46;&quot;&gt;VPC Gateway Endpoint (Amazon S3)&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#059669&quot;&gt;Zero-NAT Cost | Private Route Table Injection&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#10B981;strokeWidth=2;fontSize=11;" vertex="1" parent="vpc_container">
+          <mxGeometry x="840" y="50" width="250" height="46" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================== -->
+        <!-- AVAILABILITY ZONE A (us-east-1a)           -->
+        <!-- ========================================== -->
+        <mxCell id="az_a_box" value="&lt;b style=&quot;color:#334155;&quot;&gt;Availability Zone: us-east-1a&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=1.5;strokeDasharray=4 4;rounded=1;startSize=28;fontSize=12;fontColor:#334155;" vertex="1" parent="vpc_container">
+          <mxGeometry x="30" y="115" width="520" height="570" as="geometry" />
+        </mxCell>
+
+        <!-- Public Subnet A (Emerald Green Theme) -->
+        <mxCell id="pub_sub_a" value="&lt;b style=&quot;color:#064E3B;&quot;&gt;PUBLIC SUBNET A — 10.0.1.0/24 (Route: IGW)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#10B981;strokeWidth=2;rounded=1;startSize=26;fontSize=11;" vertex="1" parent="az_a_box">
+          <mxGeometry x="20" y="38" width="480" height="152" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alb_a_node" value="&lt;b style=&quot;font-size:12px; color:#065F46;&quot;&gt;Application Load Balancer (ALB Node A)&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#047857&quot;&gt;&lt;b&gt;Security Group: sg-alb&lt;/b&gt; (Inbound :80/:443 from 0.0.0.0/0)&lt;br&gt;ACM SSL/TLS 1.3 Termination | Health Probe: /health&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;strokeWidth=2;fontSize=10;align=left;spacingLeft=12;" vertex="1" parent="pub_sub_a">
+          <mxGeometry x="15" y="35" width="450" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="nat_a_node" value="&lt;b style=&quot;color:#1E40AF;&quot;&gt;NAT Gateway A&lt;/b&gt; &lt;font color=&quot;#3B82F6&quot;&gt;(Elastic IP: eip-nat-a)&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot;&gt;Outbound Internet Egress for Private Subnet A (Yum, OS patches, external APIs)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=12;" vertex="1" parent="pub_sub_a">
+          <mxGeometry x="15" y="93" width="450" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Private App Subnet A (Cobalt Blue Theme) -->
+        <mxCell id="priv_sub_a" value="&lt;b style=&quot;color:#1E3A8A;&quot;&gt;PRIVATE APPLICATION SUBNET A — 10.0.10.0/24 (Zero Public IPs)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#2563EB;strokeWidth=2;rounded=1;startSize=26;fontSize=11;" vertex="1" parent="az_a_box">
+          <mxGeometry x="20" y="202" width="480" height="350" as="geometry" />
+        </mxCell>
+
+        <!-- Primary EC2 Node A -->
+        <mxCell id="ec2_a_primary" value="&lt;table width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;b style=&quot;color:#1D4ED8; font-size:12px;&quot;&gt;PRIMARY EC2: Instance 1&lt;/b&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;&lt;span style=&quot;background:#DBEAFE; color:#1E40AF; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:bold;&quot;&gt;ASG MEMBER&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;hr style=&quot;margin:3px 0;&quot;&gt;&lt;font color=&quot;#1E293B&quot; style=&quot;font-size:10px;&quot;&gt;&lt;b&gt;• Instance Type:&lt;/b&gt; &lt;span style=&quot;color:#2563EB; font-weight:bold;&quot;&gt;c7g.large&lt;/span&gt; (AWS Graviton3, 2 vCPU, 4GB RAM)&lt;br&gt;&lt;b&gt;• Security Group:&lt;/b&gt; &lt;span style=&quot;color:#DC2626; font-weight:bold;&quot;&gt;sg-app&lt;/span&gt; (Inbound TCP :8080 from sg-alb ONLY)&lt;br&gt;&lt;b&gt;• Storage:&lt;/b&gt; 30 GB gp3 Root (Encrypted via KMS CMK Key)&lt;br&gt;&lt;b&gt;• Security Guardrail:&lt;/b&gt; &lt;span style=&quot;color:#B45309; font-weight:bold;&quot;&gt;IMDSv2 Required&lt;/span&gt; (Hop Limit: 1)&lt;br&gt;&lt;b&gt;• Admin Access:&lt;/b&gt; AWS Systems Manager (SSM) Session Manager (Port 22 SSH Closed)&lt;br&gt;&lt;b&gt;• Tags:&lt;/b&gt; Backup=Daily | Environment=Production | Role=API-Server&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;strokeWidth=2;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;" vertex="1" parent="priv_sub_a">
+          <mxGeometry x="15" y="35" width="450" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Dynamic Scale-Out Replica A -->
+        <mxCell id="ec2_a_replica" value="&lt;table width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;b style=&quot;color:#475569; font-size:11px;&quot;&gt;DYNAMIC SCALE-OUT REPLICA (Auto-Scaled)&lt;/b&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;&lt;span style=&quot;background:#F1F5F9; color:#475569; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:bold;&quot;&gt;SPOT / ON-DEMAND&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;hr style=&quot;margin:3px 0;&quot;&gt;&lt;font color=&quot;#64748B&quot; style=&quot;font-size:10px;&quot;&gt;• Automatically launched when ASG Target CPU &amp;gt; 65% or Requests &amp;gt; 1,000/target&lt;br&gt;• Provisioned via Launch Template &amp;amp; Golden AMI with connection draining (30s)&lt;br&gt;• Terminated gracefully during scale-in cooldown without interrupting active user traffic&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=1.5;strokeDasharray=3 3;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;" vertex="1" parent="priv_sub_a">
+          <mxGeometry x="15" y="200" width="450" height="130" as="geometry" />
+        </mxCell>
+
+
+        <!-- ========================================== -->
+        <!-- AVAILABILITY ZONE B (us-east-1b)           -->
+        <!-- ========================================== -->
+        <mxCell id="az_b_box" value="&lt;b style=&quot;color:#334155;&quot;&gt;Availability Zone: us-east-1b&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=1.5;strokeDasharray=4 4;rounded=1;startSize=28;fontSize=12;fontColor:#334155;" vertex="1" parent="vpc_container">
+          <mxGeometry x="570" y="115" width="520" height="570" as="geometry" />
+        </mxCell>
+
+        <!-- Public Subnet B (Emerald Green Theme) -->
+        <mxCell id="pub_sub_b" value="&lt;b style=&quot;color:#064E3B;&quot;&gt;PUBLIC SUBNET B — 10.0.2.0/24 (Route: IGW)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#10B981;strokeWidth=2;rounded=1;startSize=26;fontSize=11;" vertex="1" parent="az_b_box">
+          <mxGeometry x="20" y="38" width="480" height="152" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alb_b_node" value="&lt;b style=&quot;font-size:12px; color:#065F46;&quot;&gt;Application Load Balancer (ALB Node B)&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#047857&quot;&gt;&lt;b&gt;Cross-Zone Load Balancing Enabled&lt;/b&gt; (Round Robin traffic distribution)&lt;br&gt;Target Group: tg-prod-app (HTTP :8080 | Deregistration Delay: 30s)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;strokeWidth=2;fontSize=10;align=left;spacingLeft=12;" vertex="1" parent="pub_sub_b">
+          <mxGeometry x="15" y="35" width="450" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="nat_b_node" value="&lt;b style=&quot;color:#1E40AF;&quot;&gt;NAT Gateway B&lt;/b&gt; &lt;font color=&quot;#3B82F6&quot;&gt;(Elastic IP: eip-nat-b)&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot;&gt;Independent Fault Domain Egress for Private Subnet B&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=12;" vertex="1" parent="pub_sub_b">
+          <mxGeometry x="15" y="93" width="450" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Private App Subnet B (Cobalt Blue Theme) -->
+        <mxCell id="priv_sub_b" value="&lt;b style=&quot;color:#1E3A8A;&quot;&gt;PRIVATE APPLICATION SUBNET B — 10.0.20.0/24 (Zero Public IPs)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#2563EB;strokeWidth=2;rounded=1;startSize=26;fontSize=11;" vertex="1" parent="az_b_box">
+          <mxGeometry x="20" y="202" width="480" height="350" as="geometry" />
+        </mxCell>
+
+        <!-- Primary EC2 Node B -->
+        <mxCell id="ec2_b_primary" value="&lt;table width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;b style=&quot;color:#1D4ED8; font-size:12px;&quot;&gt;PRIMARY EC2: Instance 2&lt;/b&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;&lt;span style=&quot;background:#DBEAFE; color:#1E40AF; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:bold;&quot;&gt;ASG MEMBER&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;hr style=&quot;margin:3px 0;&quot;&gt;&lt;font color=&quot;#1E293B&quot; style=&quot;font-size:10px;&quot;&gt;&lt;b&gt;• Instance Type:&lt;/b&gt; &lt;span style=&quot;color:#2563EB; font-weight:bold;&quot;&gt;c7g.large&lt;/span&gt; (AWS Graviton3, 2 vCPU, 4GB RAM)&lt;br&gt;&lt;b&gt;• Security Group:&lt;/b&gt; &lt;span style=&quot;color:#DC2626; font-weight:bold;&quot;&gt;sg-app&lt;/span&gt; (Inbound TCP :8080 from sg-alb ONLY)&lt;br&gt;&lt;b&gt;• Storage:&lt;/b&gt; 30 GB gp3 Root (Encrypted via KMS CMK Key)&lt;br&gt;&lt;b&gt;• Security Guardrail:&lt;/b&gt; &lt;span style=&quot;color:#B45309; font-weight:bold;&quot;&gt;IMDSv2 Required&lt;/span&gt; (Hop Limit: 1)&lt;br&gt;&lt;b&gt;• Admin Access:&lt;/b&gt; AWS Systems Manager (SSM) Session Manager (Port 22 SSH Closed)&lt;br&gt;&lt;b&gt;• Tags:&lt;/b&gt; Backup=Daily | Environment=Production | Role=API-Server&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;strokeWidth=2;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;" vertex="1" parent="priv_sub_b">
+          <mxGeometry x="15" y="35" width="450" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Dynamic Scale-Out Replica B -->
+        <mxCell id="ec2_b_replica" value="&lt;table width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;b style=&quot;color:#475569; font-size:11px;&quot;&gt;DYNAMIC SCALE-OUT REPLICA (Auto-Scaled)&lt;/b&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;&lt;span style=&quot;background:#F1F5F9; color:#475569; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:bold;&quot;&gt;SPOT / ON-DEMAND&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;hr style=&quot;margin:3px 0;&quot;&gt;&lt;font color=&quot;#64748B&quot; style=&quot;font-size:10px;&quot;&gt;• Cross-AZ capacity balancing automatically distributes instances evenly&lt;br&gt;• ASG Instance Refresh allows zero-downtime rolling AMI &amp;amp; OS patching&lt;br&gt;• Spot capacity-optimized strategy minimizes Spot interruption risk&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=1.5;strokeDasharray=3 3;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;" vertex="1" parent="priv_sub_b">
+          <mxGeometry x="15" y="200" width="450" height="130" as="geometry" />
+        </mxCell>
+
+
+        <!-- ========================================== -->
+        <!-- ASG CONTROLLER (GOLD/AMBER VIBRANT BANNER) -->
+        <!-- ========================================== -->
+        <mxCell id="asg_banner" value="&lt;table width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;b style=&quot;font-size:13px; color:#78350F;&quot;&gt;AWS Auto Scaling Group (ASG): asg-production-app&lt;/b&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;&lt;span style=&quot;background:#F59E0B; color:#FFFFFF; padding:3px 8px; border-radius:4px; font-size:10px; font-weight:bold;&quot;&gt;MIN: 2 | DESIRED: 2 | MAX: 10&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;hr style=&quot;margin:4px 0;&quot;&gt;&lt;font color=&quot;#854D0E&quot; style=&quot;font-size:10.5px;&quot;&gt;&lt;b&gt;• Target Tracking Scaling Policies:&lt;/b&gt; &lt;span style=&quot;color:#B45309; font-weight:bold;&quot;&gt;ASGAverageCPUUtilization = 65%&lt;/span&gt; &amp;amp; &lt;span style=&quot;color:#B45309; font-weight:bold;&quot;&gt;ALBRequestCountPerTarget = 1,000&lt;/span&gt;&lt;br&gt;&lt;b&gt;• Mixed Instances Policy:&lt;/b&gt; 2 On-Demand Base (c7g.large) + 70% Spot (c7g.large, m7g.large) — &lt;b style=&quot;color:#047857;&quot;&gt;Cuts compute spend by ~60%&lt;/b&gt;&lt;br&gt;&lt;b&gt;• Health &amp;amp; Rolling Deployment:&lt;/b&gt; ELB Health Check Type (300s grace period) | Instance Refresh (Rolling 50% min healthy)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF9C3;strokeColor=#F59E0B;strokeWidth=2.5;fontSize=11;align=left;spacingLeft=14;verticalAlign=top;" vertex="1" parent="vpc_container">
+          <mxGeometry x="30" y="700" width="1060" height="95" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================== -->
+        <!-- SECURITY / PRIVATE LINK & IAM OVERLAY      -->
+        <!-- ========================================== -->
+        <mxCell id="privatelink_banner" value="&lt;b style=&quot;color:#1E293B; font-size:12px;&quot;&gt;AWS PrivateLink Interface Endpoints &amp;amp; Bastion-less Session Manager&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px;&quot;&gt;• &lt;b&gt;SSM Interface Endpoints:&lt;/b&gt; com.amazonaws.us-east-1.ssm, ssmmessages, ec2messages (Zero SSH ports open, fully audited in CloudTrail)&lt;br&gt;• &lt;b&gt;KMS &amp;amp; CloudWatch Endpoints:&lt;/b&gt; Private API execution without traversing NAT Gateways | IMDSv2 strictly stops SSRF credential theft&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#64748B;strokeWidth=1.5;fontSize=11;align=left;spacingLeft=14;" vertex="1" parent="vpc_container">
+          <mxGeometry x="30" y="810" width="1060" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="iam_banner" value="&lt;b style=&quot;color:#581C87; font-size:12px;&quot;&gt;EC2 IAM Instance Profile: role-ec2-production-app (Least Privilege Scoped)&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#6B21A8&quot; style=&quot;font-size:10px;&quot;&gt;• &lt;b&gt;Managed Attachments:&lt;/b&gt; AmazonSSMManagedInstanceCore | CloudWatchAgentServerPolicy&lt;br&gt;• &lt;b&gt;Scoped Storage Permission:&lt;/b&gt; s3:GetObject, s3:PutObject strictly limited to arn:aws:s3:::prod-enterprise-app-data/* with KMS Decrypt on Key CMK&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#7C3AED;strokeWidth=1.5;fontSize=11;align=left;spacingLeft=14;" vertex="1" parent="vpc_container">
+          <mxGeometry x="30" y="875" width="1060" height="55" as="geometry" />
+        </mxCell>
+
+
+        <!-- ========================================== -->
+        <!-- RIGHT COLUMN: S3, LAMBDA, AWS BACKUP & DR  -->
+        <!-- ========================================== -->
+
+        <!-- ------------------------------------------ -->
+        <!-- 1. S3 STORAGE ECOSYSTEM (EMERALD GREEN)    -->
+        <!-- ------------------------------------------ -->
+        <mxCell id="s3_container" value="&lt;b style=&quot;font-size:14px; color:#FFFFFF;&quot;&gt;Amazon S3 Storage Architecture &amp;amp; Multi-Tier Lifecycle&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#15803D;strokeColor=#16A34A;strokeWidth=2.5;rounded=1;startSize=32;fontSize=13;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="130" width="510" height="360" as="geometry" />
+        </mxCell>
+
+        <!-- S3 Bucket Header -->
+        <mxCell id="s3_bkt_box" value="&lt;table width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;b style=&quot;font-size:12px; color:#14532D;&quot;&gt;Bucket: prod-enterprise-app-data&lt;/b&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;&lt;span style=&quot;background:#10B981; color:#FFFFFF; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:bold;&quot;&gt;KMS SSE CMK&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;hr style=&quot;margin:3px 0;&quot;&gt;&lt;font color=&quot;#166534&quot; style=&quot;font-size:10px;&quot;&gt;• &lt;b&gt;Server-Side Encryption:&lt;/b&gt; SSE-KMS with Customer Managed Key (CMK) + Bucket Keys ON&lt;br&gt;• &lt;b&gt;Block Public Access:&lt;/b&gt; All 4 settings enabled (Zero public internet exposure)&lt;br&gt;• &lt;b&gt;Enforced TLS 1.2+:&lt;/b&gt; Explicit Deny when aws:SecureTransport = false&lt;br&gt;• &lt;b&gt;Integrity &amp;amp; Ownership:&lt;/b&gt; Versioning Enabled | Object Ownership: Bucket Owner Enforced&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=#22C55E;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;" vertex="1" parent="s3_container">
+          <mxGeometry x="15" y="42" width="480" height="92" as="geometry" />
+        </mxCell>
+
+        <!-- S3 Lifecycle Colorful Pills -->
+        <mxCell id="lbl_lifecycle" value="&lt;b style=&quot;color:#0F172A; font-size:11px;&quot;&gt;AUTOMATED STORAGE LIFECYCLE PROGRESSION&lt;/b&gt;" style="text;html=1;align=left;fontSize=11;" vertex="1" parent="s3_container">
+          <mxGeometry x="15" y="142" width="400" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Tier 1: Standard (Emerald) -->
+        <mxCell id="pill_tier1" value="&lt;b style=&quot;color:#047857;&quot;&gt;S3 Standard&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#065F46&quot; style=&quot;font-size:9px;&quot;&gt;Days 0 – 30&lt;br&gt;&lt;b&gt;Active I/O&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#10B981;strokeWidth=2;fontSize=10;" vertex="1" parent="s3_container">
+          <mxGeometry x="15" y="165" width="105" height="52" as="geometry" />
+        </mxCell>
+        <!-- Tier 2: Standard-IA (Sky Blue) -->
+        <mxCell id="pill_tier2" value="&lt;b style=&quot;color:#1D4ED8;&quot;&gt;Standard-IA&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#1E40AF&quot; style=&quot;font-size:9px;&quot;&gt;Days 30 – 90&lt;br&gt;&lt;b&gt;Infrequent Read&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#3B82F6;strokeWidth=2;fontSize=10;" vertex="1" parent="s3_container">
+          <mxGeometry x="140" y="165" width="105" height="52" as="geometry" />
+        </mxCell>
+        <!-- Tier 3: Glacier Flex (Amber) -->
+        <mxCell id="pill_tier3" value="&lt;b style=&quot;color:#B45309;&quot;&gt;Glacier Flex&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#92400E&quot; style=&quot;font-size:9px;&quot;&gt;Days 90 – 180&lt;br&gt;&lt;b&gt;Archive Tier&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#F59E0B;strokeWidth=2;fontSize=10;" vertex="1" parent="s3_container">
+          <mxGeometry x="265" y="165" width="105" height="52" as="geometry" />
+        </mxCell>
+        <!-- Tier 4: Deep Archive (Purple) -->
+        <mxCell id="pill_tier4" value="&lt;b style=&quot;color:#7E22CE;&quot;&gt;Deep Archive&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#6B21A8&quot; style=&quot;font-size:9px;&quot;&gt;Days 180 – 365&lt;br&gt;&lt;b&gt;Expire @ 365d&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#9333EA;strokeWidth=2;fontSize=10;" vertex="1" parent="s3_container">
+          <mxGeometry x="390" y="165" width="105" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- Tier Transition Connectors -->
+        <mxCell id="t_arr1" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#059669;" edge="1" parent="s3_container" source="pill_tier1" target="pill_tier2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t_arr2" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#2563EB;" edge="1" parent="s3_container" source="pill_tier2" target="pill_tier3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t_arr3" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#D97706;" edge="1" parent="s3_container" source="pill_tier3" target="pill_tier4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- S3 Event Notification Trigger -->
+        <mxCell id="s3_event_box" value="&lt;b style=&quot;color:#9A3412;&quot;&gt;S3 Event Notifications / Amazon EventBridge&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#C2410C&quot;&gt;Trigger: &lt;code&gt;s3:ObjectCreated:*&lt;/code&gt; on prefix &lt;code&gt;uploads/&lt;/code&gt; (Suffix: .json, .csv)&lt;br&gt;Invokes AWS Lambda function asynchronously with automatic payload dispatch.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#EA580C;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=10;" vertex="1" parent="s3_container">
+          <mxGeometry x="15" y="230" width="480" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- Security Guardrail Callout -->
+        <mxCell id="s3_guard_box" value="&lt;b style=&quot;color:#991B1B;&quot;&gt;Zero-Trust Security Guardrail:&lt;/b&gt; Bucket Policy strictly denies any &lt;code&gt;s3:PutObject&lt;/code&gt; without &lt;code&gt;aws:kms&lt;/code&gt; encryption and rejects non-TLS connections." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF2F2;strokeColor=#EF4444;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=10;" vertex="1" parent="s3_container">
+          <mxGeometry x="15" y="292" width="480" height="50" as="geometry" />
+        </mxCell>
+
+
+        <!-- ------------------------------------------ -->
+        <!-- 2. SERVERLESS LAMBDA PIPELINE (VIBRANT ORANGE) -->
+        <!-- ------------------------------------------ -->
+        <mxCell id="lambda_container" value="&lt;b style=&quot;font-size:14px; color:#FFFFFF;&quot;&gt;Serverless Event-Driven Processing (AWS Lambda)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#C2410C;strokeColor=#EA580C;strokeWidth=2.5;rounded=1;startSize=32;fontSize=13;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="510" width="510" height="310" as="geometry" />
+        </mxCell>
+
+        <!-- Lambda Function Card -->
+        <mxCell id="lambda_fn_box" value="&lt;table width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;b style=&quot;font-size:12px; color:#9A3412;&quot;&gt;Function: fn-process-s3-ingest&lt;/b&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;&lt;span style=&quot;background:#EA580C; color:#FFFFFF; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:bold;&quot;&gt;ARM64 GRAVITON&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;hr style=&quot;margin:3px 0;&quot;&gt;&lt;font color=&quot;#431407&quot; style=&quot;font-size:10px;&quot;&gt;• &lt;b&gt;Runtime:&lt;/b&gt; Python 3.12 / Node.js 20 LTS | &lt;b&gt;Architecture:&lt;/b&gt; arm64&lt;br&gt;• &lt;b&gt;Sizing:&lt;/b&gt; 512 MB Memory | &lt;b&gt;Timeout:&lt;/b&gt; 60 seconds | Ephemeral: 512 MB&lt;br&gt;• &lt;b&gt;Concurrency:&lt;/b&gt; Reserved Concurrency: 100 to protect downstream systems&lt;br&gt;• &lt;b&gt;CI/CD:&lt;/b&gt; CodeDeploy Canary (Linear10PercentEvery1Minute) with automated rollback&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#F97316;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;" vertex="1" parent="lambda_container">
+          <mxGeometry x="15" y="42" width="480" height="88" as="geometry" />
+        </mxCell>
+
+        <!-- Lambda IAM Execution Role -->
+        <mxCell id="lambda_iam_box" value="&lt;b style=&quot;color:#581C87;&quot;&gt;Lambda Execution Role: role-lambda-s3-processor&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#6B21A8&quot; style=&quot;font-size:9.5px;&quot;&gt;• Least-Privilege IAM: s3:GetObject, s3:PutObjectTagging on app bucket&lt;br&gt;• kms:Decrypt on CMK | sqs:SendMessage to DLQ | CloudWatch Logs publishing&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#7C3AED;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=10;" vertex="1" parent="lambda_container">
+          <mxGeometry x="15" y="140" width="480" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Dead Letter Queue (SQS) -->
+        <mxCell id="lambda_dlq_box" value="&lt;table width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;b style=&quot;color:#991B1B; font-size:11px;&quot;&gt;Dead Letter Queue (Amazon SQS DLQ): sqs-lambda-ingest-dlq&lt;/b&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;&lt;span style=&quot;background:#DC2626; color:#FFFFFF; padding:2px 5px; border-radius:3px; font-size:8.5px; font-weight:bold;&quot;&gt;DLQ ALARM&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;font color=&quot;#B91C1C&quot; style=&quot;font-size:9.5px;&quot;&gt;• Automatically catches failed payloads after 2 asynchronous retries&lt;br&gt;• 14-day retention window | KMS encrypted | CloudWatch alarm on VisibleMessages &amp;gt; 0&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF2F2;strokeColor=#DC2626;strokeWidth=2;fontSize=10;align=left;spacingLeft=10;" vertex="1" parent="lambda_container">
+          <mxGeometry x="15" y="200" width="480" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- Observability Pill -->
+        <mxCell id="lambda_obs_box" value="&lt;b style=&quot;color:#1E293B;&quot;&gt;CloudWatch Observability:&lt;/b&gt; Alarms on ErrorRate &amp;gt; 1%, Throttles &amp;gt; 0, Duration &amp;gt; 45s (SNS PagerDuty)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;strokeWidth=1;fontSize=9.5;align=left;spacingLeft=10;" vertex="1" parent="lambda_container">
+          <mxGeometry x="15" y="260" width="480" height="35" as="geometry" />
+        </mxCell>
+
+
+        <!-- ------------------------------------------ -->
+        <!-- 3. CENTRALIZED BACKUP & DR (ROYAL PURPLE)  -->
+        <!-- ------------------------------------------ -->
+        <mxCell id="backup_container" value="&lt;b style=&quot;font-size:14px; color:#FFFFFF;&quot;&gt;Centralized Backup &amp;amp; Disaster Recovery (AWS Backup)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#6B21A8;strokeColor=#7E22CE;strokeWidth=2.5;rounded=1;startSize=32;fontSize=13;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="840" width="510" height="370" as="geometry" />
+        </mxCell>
+
+        <!-- Backup Plan Card -->
+        <mxCell id="bk_plan_card" value="&lt;table width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;b style=&quot;font-size:12px; color:#581C87;&quot;&gt;AWS Backup Plan: plan-prod-enterprise&lt;/b&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;&lt;span style=&quot;background:#7C3AED; color:#FFFFFF; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:bold;&quot;&gt;DAILY 03:00 UTC&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;hr style=&quot;margin:3px 0;&quot;&gt;&lt;font color=&quot;#6B21A8&quot; style=&quot;font-size:10px;&quot;&gt;• &lt;b&gt;Automated Resource Selection:&lt;/b&gt; Tag-based matching on &lt;code&gt;Backup = Daily&lt;/code&gt;&lt;br&gt;• &lt;b&gt;Protected Resources:&lt;/b&gt; EC2 instances, EBS volumes, and Amazon S3 buckets&lt;br&gt;• &lt;b&gt;Primary Vault (us-east-1):&lt;/b&gt; Retained for 35 days (transitions to cold storage after 8 days)&lt;br&gt;• &lt;b&gt;WORM Vault Lock:&lt;/b&gt; Compliance Lock mode prevents deletion by Root or ransomware&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#9333EA;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=10;verticalAlign=top;" vertex="1" parent="backup_container">
+          <mxGeometry x="15" y="42" width="480" height="95" as="geometry" />
+        </mxCell>
+
+        <!-- Cross-Region DR Replication Card -->
+        <mxCell id="bk_crr_card" value="&lt;table width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;b style=&quot;color:#1E3A8A; font-size:11px;&quot;&gt;Cross-Region Copy: Secondary DR Vault (us-west-2)&lt;/b&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;&lt;span style=&quot;background:#2563EB; color:#FFFFFF; padding:2px 5px; border-radius:3px; font-size:8.5px; font-weight:bold;&quot;&gt;CROSS-REGION&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;font color=&quot;#1E40AF&quot; style=&quot;font-size:9.5px;&quot;&gt;• Asynchronously replicates recovery points to physically isolated secondary AWS region&lt;br&gt;• Guarantees regional disaster immunity and independent credential boundary&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=10;" vertex="1" parent="backup_container">
+          <mxGeometry x="15" y="148" width="480" height="58" as="geometry" />
+        </mxCell>
+
+        <!-- Restore Testing & SLA Card -->
+        <mxCell id="bk_sla_card" value="&lt;table width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;b style=&quot;color:#047857; font-size:11px;&quot;&gt;Automated Restore Testing &amp;amp; DR SLA Targets&lt;/b&gt;&lt;/td&gt;&lt;td align=&quot;right&quot;&gt;&lt;span style=&quot;background:#10B981; color:#FFFFFF; padding:2px 5px; border-radius:3px; font-size:8.5px; font-weight:bold;&quot;&gt;WEEKLY DRILL&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;font color=&quot;#065F46&quot; style=&quot;font-size:9.5px;&quot;&gt;• &lt;b&gt;Weekly Restore Testing:&lt;/b&gt; Automated dry-run restore into isolated sandbox VPC every Sunday&lt;br&gt;• &lt;b&gt;Recovery Point Objective (RPO):&lt;/b&gt; &amp;lt; 24h (EBS Snapshots) | &amp;lt; 15 min (S3 PITR)&lt;br&gt;• &lt;b&gt;Recovery Time Objective (RTO):&lt;/b&gt; &amp;lt; 2 hours (Full infrastructure rebuild via Terraform)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#10B981;strokeWidth=1.5;fontSize=10;align=left;spacingLeft=10;" vertex="1" parent="backup_container">
+          <mxGeometry x="15" y="215" width="480" height="72" as="geometry" />
+        </mxCell>
+
+        <!-- DR Trigger / Alerting -->
+        <mxCell id="bk_alert_box" value="&lt;b style=&quot;color:#78350F;&quot;&gt;Health &amp;amp; Compliance Monitoring:&lt;/b&gt; EventBridge alerts on BACKUP_JOB_FAILED / COPY_JOB_FAILED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=1;fontSize=9.5;align=left;spacingLeft=10;" vertex="1" parent="backup_container">
+          <mxGeometry x="15" y="298" width="480" height="35" as="geometry" />
+        </mxCell>
+
+
+        <!-- ========================================== -->
+        <!-- COLOR-CODED INTER-TIER DATA FLOW ARROWS    -->
+        <!-- ========================================== -->
+
+        <!-- 1. WAF to ALB Node A -->
+        <mxCell id="conn_waf_alb" value="2. HTTPS :443 Filtered Traffic" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#4F46E5;fontColor=#312E81;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="waf_node" target="alb_a_node">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="418" y="250" />
+              <mxPoint x="315" y="250" />
+              <mxPoint x="315" y="415" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 2. ALB to EC2 Primary AZ-A -->
+        <mxCell id="conn_alb_ec2a" value="3. Target Group HTTP :8080" style="endArrow=classic;html=1;strokeWidth=2.5;strokeColor=#059669;fontColor=#065F46;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="az_a_box" source="alb_a_node" target="ec2_a_primary">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 3. ALB to EC2 Primary AZ-B (Cross-Zone) -->
+        <mxCell id="conn_alb_ec2b" value="Cross-Zone :8080" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#059669;strokeDasharray=4 4;fontColor=#065F46;exitX=0.8;exitY=1;entryX=0.2;entryY=0;" edge="1" parent="vpc_container" source="alb_a_node" target="ec2_b_primary">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="380" />
+              <mxPoint x="700" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 4. EC2 to S3 via Gateway Endpoint -->
+        <mxCell id="conn_ec2_s3" value="4. Private S3 I/O via Gateway Endpoint (KMS Encrypted)" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#10B981;fontColor=#047857;exitX=1;exitY=0.4;entryX=0;entryY=0.5;" edge="1" parent="1" source="ec2_b_primary" target="s3_bkt_box">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1140" y="660" />
+              <mxPoint x="1140" y="218" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 5. S3 Events to Lambda Trigger -->
+        <mxCell id="conn_s3_lambda" value="5. s3:ObjectCreated Trigger (Async Event)" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#EA580C;fontColor=#9A3412;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="s3_event_box" target="lambda_fn_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 6. Lambda Failure to DLQ -->
+        <mxCell id="conn_lambda_dlq" value="On 2x Failure" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#DC2626;strokeDasharray=3 3;fontColor=#B91C1C;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="lambda_container" source="lambda_iam_box" target="lambda_dlq_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 7. EC2 ASG Tagging to AWS Backup -->
+        <mxCell id="conn_asg_backup" value="6. Scheduled Daily Snapshots (Tag: Backup=Daily)" style="endArrow=classic;html=1;strokeWidth=2.5;strokeColor=#7C3AED;strokeDasharray=5 5;fontColor=#6B21A8;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="asg_banner" target="bk_plan_card">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1160" y="1008" />
+              <mxPoint x="1160" y="930" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
